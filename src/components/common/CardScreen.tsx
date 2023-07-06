@@ -1,21 +1,29 @@
 import React from 'react'
 import styled from 'styled-components'
 import { createDoneTask, deleteTask, updateTask } from '../../utils/APIs';
-
+import { AiFillFolderAdd } from "react-icons/ai"
+import InputScreen from '../../pages/InputScreen';
 interface iData {
     title?: string;
+    icon?: boolean;
+    input?: boolean;
     data?: []
 }
 
-const CardScreen: React.FC<iData> = ({ title, data }) => {
+const CardScreen: React.FC<iData> = ({ title, data, icon, input }) => {
     return (
-        <div>
+        <Container>
             <Main>
-                <Title>{title}</Title>
+                <Title>
+                    <span>{title}</span>
+                    {
+                        icon ? <Icon /> : null
+                    }
+                </Title>
 
                 {
                     data?.map((props: any) => (
-                        <Card key={props.id}
+                        <Card key={props._id}
                             bg={
                                 props.priority === "Urgent" ? "red" :
                                     props.priority === "High" ? "pink" :
@@ -29,7 +37,7 @@ const CardScreen: React.FC<iData> = ({ title, data }) => {
                                 onClick={() => {
                                     // updateTask(props.id)
                                     createDoneTask(props)
-                                    deleteTask(props.id)
+                                    deleteTask(props._id)
 
                                     window.location.reload()
                                 }}
@@ -38,11 +46,30 @@ const CardScreen: React.FC<iData> = ({ title, data }) => {
                     ))
                 }
             </Main>
-        </div>
+
+            <Holder>
+                {input && <InputScreen />}
+            </Holder>
+        </Container>
     )
 }
 
 export default CardScreen
+
+const Holder = styled.div`
+position: absolute;
+z-index: 10;
+top: 0;
+left: 0;
+`
+
+const Container = styled.div`
+position: relative
+`
+
+const Icon = styled(AiFillFolderAdd)`
+margin-right: 10px
+`
 
 const Move = styled.div`
 color: white;
@@ -75,6 +102,14 @@ text-align: center;
 padding: 10px 0;
 text-transform: uppercase;
 font-weight: bold;
+
+display:flex;
+align-items: center;
+justify-content: space-between;
+
+span{
+    margin-left: 10px;
+}
 `
 
 const Main = styled.div`
