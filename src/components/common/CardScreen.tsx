@@ -1,8 +1,9 @@
-import React from 'react'
+import { contextState } from '../../global/GlobalState';
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 import { createDoneTask, deleteTask, updateTask } from '../../utils/APIs';
 import { AiFillFolderAdd } from "react-icons/ai"
-import InputScreen from '../../pages/InputScreen';
+import Swal from 'sweetalert2';
 interface iData {
     title?: string;
     icon?: boolean;
@@ -11,13 +12,22 @@ interface iData {
 }
 
 const CardScreen: React.FC<iData> = ({ title, data, icon, input }) => {
+    const { globalState, setGlobalState } = useContext(contextState)
+
+    const onToggle = () => {
+        setGlobalState!(!globalState)
+    }
+
+
     return (
         <Container>
             <Main>
                 <Title>
                     <span>{title}</span>
                     {
-                        icon ? <Icon /> : null
+                        icon ? <Icon
+                            onClick={onToggle}
+                        /> : null
                     }
                 </Title>
 
@@ -36,10 +46,30 @@ const CardScreen: React.FC<iData> = ({ title, data, icon, input }) => {
                             <Move
                                 onClick={() => {
                                     // updateTask(props.id)
-                                    createDoneTask(props)
-                                    deleteTask(props._id)
 
-                                    window.location.reload()
+                                    Swal.fire({
+                                        title: 'Are you sure?',
+                                        text: "You won't be able to revert this!",
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonColor: '#3085d6',
+                                        cancelButtonColor: '#d33',
+                                        confirmButtonText: "No, your won't be Move it to Progress!"
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            Swal.fire(
+                                                'Stop!',
+                                                "Your Task has been moved to progress.",
+                                                'success'
+                                            ).then(() => {
+                                                createDoneTask(props)
+                                                deleteTask(props._id)
+
+                                                window.location.reload()
+                                            })
+                                        }
+                                    })
+
                                 }}
                             >Move to Progress</Move>
                         </Card>
@@ -47,21 +77,13 @@ const CardScreen: React.FC<iData> = ({ title, data, icon, input }) => {
                 }
             </Main>
 
-            <Holder>
-                {input && <InputScreen />}
-            </Holder>
         </Container>
     )
 }
 
 export default CardScreen
 
-const Holder = styled.div`
-position: absolute;
-z-index: 10;
-top: 0;
-left: 0;
-`
+
 
 const Container = styled.div`
 position: relative

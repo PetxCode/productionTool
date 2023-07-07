@@ -1,12 +1,21 @@
-import React from 'react'
+import Swal from "sweetalert2"
+import React, { useContext } from 'react'
+import { AiOutlineClose } from "react-icons/ai"
 import styled from 'styled-components'
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
 import { createTask } from '../utils/APIs'
 import { v4 as uuidv4 } from "uuid"
+import { contextState } from '../global/GlobalState'
 
 const InputScreen = () => {
+
+    const { globalState, setGlobalState } = useContext(contextState)
+
+    const onToggle = () => {
+        setGlobalState!(false)
+    }
 
     const model = yup.object({
         task: yup.string().required(),
@@ -31,7 +40,18 @@ const InputScreen = () => {
             completed: false
         })
 
-        reset()
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "Your Task has been create!",
+            icon: 'success',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'Yes,!'
+        }).then(() => {
+            reset()
+            onToggle()
+        })
+
+
     })
 
     return (
@@ -40,6 +60,9 @@ const InputScreen = () => {
                 <Main
                     onSubmit={handleMySubmission}
                 >
+                    <Icons onClick={onToggle}
+
+                    />
                     <Input
                         placeholder="Enter your Task"
                         {...register("task")}
@@ -61,6 +84,11 @@ const InputScreen = () => {
 }
 
 export default InputScreen
+
+const Icons = styled(AiOutlineClose)`
+font-size: 30px;
+
+`
 
 const Error = styled.div`
 font-size: 10px;
