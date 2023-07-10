@@ -6,6 +6,8 @@ import InputScreen from './InputScreen'
 import { contextState } from '../global/GlobalState'
 
 const HomeScreen = () => {
+
+
     const { globalState } = useContext(contextState)
     const [state, setState] = useState<any>([])
     const [stateI, setStateI] = useState<any>([])
