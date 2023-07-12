@@ -5,6 +5,12 @@ import { logOut } from '../../global/AuthGlobal'
 import { useState, useEffect } from "react"
 import { readOne } from '../../utils/AuthAPI'
 
+interface iData {
+    readID?: string | null
+}
+interface iDataII {
+    readID?: {} | null
+}
 
 const Header = () => {
     const dispatch = useDispatch()
@@ -12,23 +18,40 @@ const Header = () => {
 
     const [userData, setUserData] = useState<any>({})
 
+    const [readID, setReadID] = useState(JSON.parse(localStorage.getItem("getUserDataID") || ""))
 
+    // getUserDataID
 
     useEffect(() => {
-        readOne(user).then((res) => {
+        readOne(readID).then((res: any) => {
             setUserData(res)
+
+            window.localStorage.setItem("getUserData", JSON.stringify(res))
         })
+
+
     }, [])
+
+    // let readData = JSON.parse(window?.localStorage?.getItem("reading"))
+
     return (
         <div>
             <Container>
                 <Main>
-                    <Logo>Logo</Logo>
+                    <Logo>Log</Logo>
 
                     <NavBox>
                         <Link to="/" style={{ textDecoration: "none", color: "white" }} >
                             <Nav>
-                                {userData?.userName}
+                                {/* {userData?.userName} */}
+                            </Nav>
+                        </Link>
+                    </NavBox>
+
+                    <NavBox>
+                        <Link to="/" style={{ textDecoration: "none", color: "white" }} >
+                            <Nav>
+                                {/* {readData} */}
                             </Nav>
                         </Link>
                     </NavBox>
@@ -36,6 +59,13 @@ const Header = () => {
                     <Button
                         onClick={() => {
                             dispatch(logOut())
+
+                            JSON.parse(localStorage?.removeItem("userDataInfo"))
+
+                            JSON.parse(localStorage?.removeItem("getUserDataID"))
+
+
+
                         }}
                     >Log Out</Button>
 

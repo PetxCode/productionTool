@@ -1,7 +1,7 @@
 import { contextState } from '../../global/GlobalState';
 import React, { useContext } from 'react'
 import styled from 'styled-components'
-import { createDoneTask, deleteTask, updateTask } from '../../utils/APIs';
+import { createDoneTask, createTimeLine, deleteTask, updateTask } from '../../utils/APIs';
 import { AiFillFolderAdd } from "react-icons/ai"
 import Swal from 'sweetalert2';
 interface iData {
@@ -63,6 +63,7 @@ const CardScreen: React.FC<iData> = ({ title, data, icon, input }) => {
                                                 'success'
                                             ).then(() => {
                                                 createDoneTask(props)
+                                                createTimeLine(props)
                                                 deleteTask(props._id)
 
                                                 window.location.reload()
@@ -138,4 +139,5 @@ const Main = styled.div`
 width: 250px;
 border: 1px solid silver;
 border-radius:3PX; 
+margin: 0 5px
 `

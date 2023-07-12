@@ -6,6 +6,7 @@ import axios from "axios";
 const realURL: string = "http://localhost:2233/api/v1/task/"
 
 const doneURL: string = "http://localhost:2233/api/v1/done/"
+const timeURL: string = "http://localhost:2233/api/v1/time-line/"
 
 export const createTask = async (data: any) => {
     try {
@@ -65,6 +66,28 @@ export const createDoneTask = async (data: any) => {
 export const readDoneTask = async () => {
     try {
         return await axios.get(doneURL).then((res: any) => {
+            return res.data.data
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+export const readTimeLine = async () => {
+    try {
+        return await axios.get(timeURL).then((res: any) => {
+            return res.data.data
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+export const createTimeLine = async (data: any) => {
+    try {
+        return await axios.post(timeURL, data).then((res: any) => {
             return res.data.data
         })
     } catch (error) {

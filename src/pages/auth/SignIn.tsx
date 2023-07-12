@@ -29,10 +29,11 @@ const SignIn = () => {
         const { myEmail, myPassword } = data
         signInUser({ email: myEmail, password: myPassword }).then((res) => {
             dispatch(createUser(res))
-            console.log(user)
+
+            window.localStorage.setItem("getUserDataID", JSON.stringify(res))
             navigate("/")
         })
-
+        console.log(myEmail)
         reset()
     })
 

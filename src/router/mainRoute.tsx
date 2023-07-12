@@ -15,18 +15,26 @@ import DoneTask from '../pages/MainPage/DoneTask'
 export const mainRoute = createBrowserRouter([
     {
         path: "/",
-        element: <Layout />,
+        element: <PrivateRoute>
+            <MainLayout />
+        </PrivateRoute>,
         children: [
             {
                 index: true,
-                element: <PrivateRoute>
-                    <HomeScreen />
-                </PrivateRoute>
+                element: <AllSections />
             },
             {
-                path: '/input',
-                element: <InputScreen />
-            }
+                path: "task",
+                element: <ViewTask />
+            },
+            {
+                path: "progress",
+                element: <ViewProgress />
+            },
+            {
+                path: "done",
+                element: <DoneTask />
+            },
         ]
     },
     {
@@ -39,7 +47,9 @@ export const mainRoute = createBrowserRouter([
     },
     {
         path: "/main/",
-        element: <MainLayout />,
+        element:
+            <HomeScreen />
+        ,
         children: [
             {
                 index: true,
